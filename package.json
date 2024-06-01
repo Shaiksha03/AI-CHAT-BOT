@@ -17,10 +17,9 @@
   },
   "scripts": {
     "start": "node server.js",
-    "build": "node server.js build",
-    "test": "node server.js test",
-    "eject": "node server.js eject",
-    "heroku-postbuild": "npm run build"
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
