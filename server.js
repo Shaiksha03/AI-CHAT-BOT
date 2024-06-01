@@ -1,7 +1,7 @@
 const express = require('express');
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 const admin = require('firebase-admin');
-const path = require('path'); // Added path module
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -26,16 +26,13 @@ const safetySettings = [
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
 ];
 
-// Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'build')));
-
 app.use(express.json());
 
-// Initialize Firebase Admin SDK
 const serviceAccount = require('./serviceAccountKey.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://console.firebase.google.com/project/ai-chat-bot-03/firestore/data/~2F?view=panel-view&query=1%7CLIM%7C3%2F100&scopeType=collection&scopeName=%2Fchats" // Replace with your Firebase database URL
+  databaseURL: process.env.FIREBASE_DB_URL, // Use environment variable for Firebase URL
 });
 
 const db = admin.firestore();
@@ -80,7 +77,6 @@ app.delete('/api/chats/:id', async (req, res) => {
   }
 });
 
-// Handles any requests that don't match the ones above
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
